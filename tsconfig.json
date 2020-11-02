@@ -2,7 +2,7 @@
   "include": ["src/**/*.ts", "src/**/*.js", "src/**/*.json"],
   "compilerOptions": {
     "resolveJsonModule": true,
-    "outDir": "dist",
+    "outDir": "lib",
     "module": "commonjs",
     "lib": ["es2020"],
     "target": "ES6",
