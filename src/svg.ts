@@ -10,6 +10,7 @@ const Y_OFFSET = 30;
 const BOTTOM_ROW_HEIGHT = 40;
 const LEGEND_X_OFFSET = 70;
 const LEGEND_Y_OFFSET = 22;
+const AUTO_PALETTE_SIZE = 100;
 const WIDTH =
   (SQUARE_SIZE + SQUARE_MARGIN) * 53 +
   SQUARE_MARGIN +
@@ -66,6 +67,7 @@ export function generate(
   }
 
   const max = Math.max(...data);
+  const p = palette ?? genPalette();
 
   Array(paddingBefore)
     .fill(0)
@@ -74,17 +76,26 @@ export function generate(
       svg.push(
         square(
           getSquareCoord(i),
-          palette
-            ? palette[day]
-            : `hsl(${Math.floor((day / max) * 60) + 1}, 100%, ${
-                Math.floor((day / max) * 60) + 40
-              }%)`
+          palette ? p[day] : p[Math.floor((day / max) * 99)]
         )
       )
     );
 
   svg.push(FOOTER);
   return svg.join("");
+}
+
+function genPalette(): string[] {
+  const palette = ["#eeeeee"];
+  for (let i = 0; i < 99; i++) {
+    palette.push(
+      `hsl(${
+        Math.floor(i ** 1.4 * (120 / AUTO_PALETTE_SIZE ** 1.4) + 300) % 360
+      }, 100%, ${i ** 0.2 * (50 / AUTO_PALETTE_SIZE ** 0.2)}%)`
+    );
+  }
+
+  return palette;
 }
 
 function legend(palette?: string[]): string {
@@ -99,11 +110,16 @@ function gradientLegend(): string {
   const endX = WIDTH - LEGEND_X_OFFSET - SQUARE_MARGIN - SQUARE_SIZE;
   const height = HEIGHT - LEGEND_Y_OFFSET - 16;
   const width = 150;
-  svg.push(
-    `<rect x="${
-      endX - width
-    }" y="${height}" height="${SQUARE_SIZE}" width="${width}" rx="5" fill="url(#legend-grad)" />`
-  );
+  const p = genPalette();
+  for (let i = 0; i < AUTO_PALETTE_SIZE; i++) {
+    svg.push(
+      `<rect x="${
+        endX - width + (width / AUTO_PALETTE_SIZE) * i
+      }" y="${height}" height="${SQUARE_SIZE}" width="${
+        width / AUTO_PALETTE_SIZE
+      }" fill="${p[i]}" stroke="transparent"/>`
+    );
+  }
   svg.push(
     label(
       [endX - width - SQUARE_MARGIN, HEIGHT - LEGEND_Y_OFFSET],
