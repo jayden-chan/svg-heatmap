@@ -4,9 +4,9 @@ import { PalettePresets } from "./types";
 function main() {
   const data = [2];
   for (let i = 0; i < 364; i++) {
-    data.push(Math.floor(Math.random() * PalettePresets.blue.length));
+    data.push(Math.floor(Math.random() * PalettePresets.gitHub.length));
   }
-  console.log(generate(data, 2019, PalettePresets.blue));
+  console.log(generate(data, 2019, PalettePresets.gitHub));
 }
 
 main();
