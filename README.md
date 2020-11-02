@@ -18,10 +18,14 @@ for (let i = 0; i < 365; i++) {
 
 const svg = generate(data, 2019, PalettePresets.gitHub);
 ```
-### GitHub Palette
+## Palette Presets
+### GitHub (`gitHub`)
 ![Example](./examples/github.svg)
 
-### Blue Palette
+### GitHub Old (`gitHubOld`)
+![Example](./examples/github-old.svg)
+
+### Blue (`blue`)
 ![Example](./examples/blue.svg)
 
 ### Auto Generated Palette
