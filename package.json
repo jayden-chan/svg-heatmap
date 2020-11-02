@@ -3,9 +3,18 @@
   "version": "0.0.1",
   "description": "Generate GitHub-like heatmap graphs with SVG",
   "main": "lib/index.js",
+  "files": [
+    "lib/index.js",
+    "lib/index.d.ts",
+    "lib/svg.js",
+    "lib/svg.d.ts",
+    "lib/types.js",
+    "lib/types.d.ts"
+  ],
   "scripts": {
     "test": "node lib/example.js > test.svg",
     "build": "tsc",
+    "prepare": "tsc",
     "dev": "tsc -w"
   },
   "repository": {

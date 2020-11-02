@@ -42,6 +42,13 @@ const HEADER = `<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 
 const FOOTER = "</svg>";
 
+/**
+ * @param {number[]} data The heatmap data, 0-indexed to Jan 1
+ * @param {number} year The year of the data. Used for day-of-week alignment
+ * @param {string[]} [palette] Optional color palette to use. If not specified a palette will be generated
+ *
+ * @return {string} The SVG heatmap string
+ */
 export function generate(
   data: number[],
   year: number,
@@ -78,7 +85,9 @@ export function generate(
       svg.push(
         square(
           getSquareCoord(i),
-          palette ? p[day] : p[Math.floor((day / max) * 99)]
+          palette
+            ? p[day]
+            : p[Math.floor((day / max) * (AUTO_PALETTE_SIZE - 1))]
         )
       )
     );
