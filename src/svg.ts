@@ -64,7 +64,7 @@ export function generate(
   svg.push(label([X_OFFSET, getSquareCoord(0)[1] + yLabelPad], "Sun", "end"));
   svg.push(label([X_OFFSET, getSquareCoord(1)[1] + yLabelPad], "Mon", "end"));
   svg.push(label([X_OFFSET, getSquareCoord(2)[1] + yLabelPad], "Tue", "end"));
-  svg.push(label([X_OFFSET, getSquareCoord(3)[1] + yLabelPad], "Web", "end"));
+  svg.push(label([X_OFFSET, getSquareCoord(3)[1] + yLabelPad], "Wed", "end"));
   svg.push(label([X_OFFSET, getSquareCoord(4)[1] + yLabelPad], "Thu", "end"));
   svg.push(label([X_OFFSET, getSquareCoord(5)[1] + yLabelPad], "Fri", "end"));
   svg.push(label([X_OFFSET, getSquareCoord(6)[1] + yLabelPad], "Sat", "end"));
