@@ -53,12 +53,14 @@ export function generate(
   svg.push(legend(palette));
 
   const paddingBefore = Number(format(new Date(year, 0, 1), "e")) - 1;
-  for (let i = 0; i < 7; i++) {
-    const day = format(new Date(year, 0, i + 8 - paddingBefore), "EEE");
-    svg.push(
-      label([X_OFFSET, getSquareCoord(i)[1] + SQUARE_SIZE * 0.78], day, "end")
-    );
-  }
+  const yLabelPad = SQUARE_SIZE * 0.78;
+  svg.push(label([X_OFFSET, getSquareCoord(0)[1] + yLabelPad], "Sun", "end"));
+  svg.push(label([X_OFFSET, getSquareCoord(1)[1] + yLabelPad], "Mon", "end"));
+  svg.push(label([X_OFFSET, getSquareCoord(2)[1] + yLabelPad], "Tue", "end"));
+  svg.push(label([X_OFFSET, getSquareCoord(3)[1] + yLabelPad], "Web", "end"));
+  svg.push(label([X_OFFSET, getSquareCoord(4)[1] + yLabelPad], "Thu", "end"));
+  svg.push(label([X_OFFSET, getSquareCoord(5)[1] + yLabelPad], "Fri", "end"));
+  svg.push(label([X_OFFSET, getSquareCoord(6)[1] + yLabelPad], "Sat", "end"));
 
   for (let i = 0; i < 12; i++) {
     const date = new Date(year, i, 1);
