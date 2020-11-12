@@ -28,15 +28,7 @@ const HEADER = `<svg xmlns="http://www.w3.org/2000/svg" width="${WIDTH}" height=
 <!-- https://www.npmjs.com/package/svg-heatmap -->
 <style>
   .outline { fill: none; stroke: #DDD; stroke-width: 2px }
-  .square { stroke: none }
-  .label { font-family: sans-serif }
-</style>
-<defs>
-  <linearGradient id="legend-grad" x1="0%" y1="0%" x2="100%" y2="0%">
-    <stop offset="0%" style="stop-color:hsl(1, 100%, 50%);stop-opacity:1" />
-    <stop offset="100%" style="stop-color:hsl(60, 100%, 50%);stop-opacity:1" />
-  </linearGradient>
-</defs>
+  .lbl { font-family: sans-serif }
 `;
 
 const FOOTER = "</svg>";
@@ -54,7 +46,10 @@ export function generate(
   palette?: string[]
 ): string {
   const svg = [];
+  const p = palette ?? genPalette();
   svg.push(HEADER);
+  svg.push(genPaletteClasses(p));
+  svg.push("\n</style>\n");
   svg.push(outline());
   svg.push(legend(palette));
 
@@ -75,18 +70,15 @@ export function generate(
   }
 
   const max = Math.max(...data);
-  const p = palette ?? genPalette();
 
   Array(paddingBefore)
     .fill(0)
     .concat(data.concat(Array(53 * 7 - data.length - paddingBefore).fill(0)))
     .forEach((day, i) =>
       svg.push(
-        square(
+        pSquare(
           getSquareCoord(i),
-          palette
-            ? p[day]
-            : p[Math.floor((day / max) * (AUTO_PALETTE_SIZE - 1))]
+          palette ? day : Math.floor((day / max) * (AUTO_PALETTE_SIZE - 1))
         )
       )
     );
@@ -101,11 +93,17 @@ function genPalette(): string[] {
     palette.push(
       `hsl(${
         Math.floor(i ** 1.4 * (120 / AUTO_PALETTE_SIZE ** 1.4) + 300) % 360
-      }, 100%, ${i ** 0.2 * (50 / AUTO_PALETTE_SIZE ** 0.2)}%)`
+      }, 100%, ${(i ** 0.2 * (50 / AUTO_PALETTE_SIZE ** 0.2)).toFixed(3)}%)`
     );
   }
 
   return palette;
+}
+
+function genPaletteClasses(palette: string[]): string {
+  return palette
+    .map((c, i) => `  .p${i} { fill: ${c}; stroke: none }`)
+    .join("\n");
 }
 
 function legend(palette?: string[]): string {
@@ -127,7 +125,7 @@ function gradientLegend(): string {
         endX - width + (width / AUTO_PALETTE_SIZE) * i
       }" y="${height}" height="${SQUARE_SIZE}" width="${
         width / AUTO_PALETTE_SIZE
-      }" fill="${p[i]}" stroke="transparent"/>`
+      }" class="p${i}" />`
     );
   }
   svg.push(
@@ -142,9 +140,9 @@ function gradientLegend(): string {
 
 function discreteLegend(palette: string[]): string {
   const svg = [];
-  [...palette].reverse().forEach((color, i) => {
+  palette.forEach((_, i) => {
     svg.push(
-      square(
+      pSquare(
         [
           WIDTH -
             LEGEND_X_OFFSET -
@@ -153,10 +151,11 @@ function discreteLegend(palette: string[]): string {
             (SQUARE_MARGIN + SQUARE_SIZE) * i,
           HEIGHT - LEGEND_Y_OFFSET - 16,
         ],
-        color
+        palette.length - i - 1
       )
     );
   });
+
   svg.push(
     label(
       [
@@ -189,14 +188,13 @@ function getSquareCoord(i: number): Coord {
 }
 
 function label([x, y]: Coord, text: string, anchor?: string): string {
-  return `<text x="${x}" y="${y}" class="label" text-anchor="${
+  return `<text x="${x}" y="${y}" class="lbl" text-anchor="${
     anchor ?? "start"
   }">${text}</text>`;
 }
 
-function square([x, y]: Coord, color: string): string {
-  const style = `style="fill:${color}"`;
-  return `<rect x="${x}" y="${y}" width="${SQUARE_SIZE}" height="${SQUARE_SIZE}" rx="${SQUARE_RX}" ${style} class="square"/>`;
+function pSquare([x, y]: Coord, p: number): string {
+  return `<rect x="${x}" y="${y}" width="${SQUARE_SIZE}" height="${SQUARE_SIZE}" rx="${SQUARE_RX}" class="p${p}"/>`;
 }
 
 function outline(): string {
