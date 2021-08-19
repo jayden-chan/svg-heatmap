@@ -22,7 +22,7 @@
     "url": "git+https://github.com/jayden-chan/svg-heatmap.git"
   },
   "author": "Jayden Chan <jaydencn7@gmail.com>",
-  "license": "GPLv3",
+  "license": "GPL-3.0-only",
   "bugs": {
     "url": "https://github.com/jayden-chan/svg-heatmap/issues"
   },
